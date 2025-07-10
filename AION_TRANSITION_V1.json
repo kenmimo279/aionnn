@@ -1,0 +1,30 @@
+{
+  "module_name": "AION_TYPE_TRANSITION_MODULE_V1",
+  "description": "Handles detection of pattern shifts and transitions between TYPEs (e.g. from TYPE_1 to TYPE_2)",
+  "logic": [
+    {
+      "id": "T1_TO_T2",
+      "description": "Detects when a Balanced Pairing loop ends and transitions into a Cutpoint-1 (e.g. BBPP → BPP → BPP)",
+      "trigger": {
+        "preceding_pattern": "TYPE_1 (any subtype)",
+        "current_sequence_shape": "Pattern where streak ≥ 2 followed by 1 of opposite",
+        "repetition": "At least 2 consecutive patterns like PPB, BBP"
+      },
+      "classified_as": "TYPE_2",
+      "example_sequence": "BBPPBPPBPP",
+      "explanation": "Initial Balanced Pairing (e.g. BBPP) transitions into a Cutpoint-1 cycle (PPB, PPB, ...), signaling a pattern shift."
+    },
+    {
+      "id": "T1_CONTINUED_SHORTENED",
+      "description": "Detects when a longer Balanced Pairing loop (e.g. 1.4) shifts into a shorter subtype (e.g. 1.2 or 1.1)",
+      "trigger": {
+        "preceding_pattern": "TYPE_1 with higher subtype (e.g. 1.4)",
+        "next_pattern": "TYPE_1 with lower subtype (e.g. 1.2)",
+        "streak_trend": "Decreasing in equal streak size"
+      },
+      "classified_as": "Subpattern contraction",
+      "example_sequence": "BBBBPPPP → BBPP → BP",
+      "explanation": "Momentum decays into shorter but similar subtype structures. Important for controlling prediction force."
+    }
+  ]
+}
